@@ -104,7 +104,9 @@ export default function Home() {
           else setOutput("No profitable buy/sell options listed.");
           break;
         default:
-          setOutput("Invalid option. Try '-part1' or '-bonus'");
+          setOutput(
+            "Invalid option. Try '-part1' or '-bonus' and make sure to leave out the executable call."
+          );
           break;
       }
     },
@@ -150,7 +152,7 @@ export default function Home() {
               </button>
             </form>
           </div>
-          <div className="h-10 w-full rounded bg-gray-600 flex items-center justify-center">
+          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2">
             {output}
           </div>
         </div>
