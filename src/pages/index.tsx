@@ -78,37 +78,43 @@ export default function Home() {
     initialValues: { command: "" },
     onSubmit: (values) => {
       const [part, data] = values.command.split(" ");
-      switch (part) {
-        case "-part1":
-          const portfolio = getPortfolioValue(data);
-          if (!portfolio.error)
+
+      if (!data || !part) setOutput("Invalid input");
+      else
+        switch (part) {
+          case "-part1":
+            const portfolio = getPortfolioValue(data);
+            if (!portfolio.error)
+              setOutput(
+                `The queried portfolio is worth ${new Intl.NumberFormat(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                  }
+                ).format(portfolio.value)}.`
+              );
+            else setOutput(`${portfolio.error}`);
+            break;
+          case "-bonus":
+            const profitInfo = maximizeProfit(data);
+            if (profitInfo.profit > 0)
+              setOutput(
+                `Buy on day ${profitInfo.dayToBuy} and sell on day ${
+                  profitInfo.dayToSell
+                } for a profit of ${new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(profitInfo.profit)}.`
+              );
+            else setOutput("No profitable buy/sell options listed.");
+            break;
+          default:
             setOutput(
-              `The queried portfolio is worth ${new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(portfolio.value)}.`
+              "Invalid option. Try '-part1' or '-bonus' and make sure to leave out the executable call."
             );
-          else setOutput(`${portfolio.error}`);
-          break;
-        case "-bonus":
-          const profitInfo = maximizeProfit(data);
-          if (profitInfo.profit > 0)
-            setOutput(
-              `Buy on day ${profitInfo.dayToBuy} and sell on day ${
-                profitInfo.dayToSell
-              } for a profit of ${new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(profitInfo.profit)}.`
-            );
-          else setOutput("No profitable buy/sell options listed.");
-          break;
-        default:
-          setOutput(
-            "Invalid option. Try '-part1' or '-bonus' and make sure to leave out the executable call."
-          );
-          break;
-      }
+            break;
+        }
     },
   });
 
