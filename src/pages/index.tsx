@@ -79,7 +79,7 @@ export default function Home() {
     onSubmit: (values) => {
       const [part, data] = values.command.split(" ");
 
-      if (!data || !part) setOutput("Invalid input");
+      if (!data) setOutput("Invalid input");
       else
         switch (part) {
           case "-part1":
