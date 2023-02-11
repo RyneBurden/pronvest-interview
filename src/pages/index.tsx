@@ -9,27 +9,41 @@ import stockData from "../stocks.json";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function getPortfolioValue(portfolioString: string): number {
-  const queriedStocks = portfolioString.replaceAll('"', "").split(",");
+interface Portfolio {
+  value: number;
+  error?: string;
+}
 
-  const totalPortfolioWorth = queriedStocks.reduce((prev, current) => {
-    const [queriedTicker, queriedAmount] = current.split(":");
-    const queriedStock = stockData.filter(
-      (entry) => entry.ticker === queriedTicker
-    );
+function getPortfolioValue(portfolioString: string): Portfolio {
+  try {
+    const queriedStocks = portfolioString.replaceAll('"', "").split(",");
 
-    const queriedStockWorth = Number(queriedAmount) * queriedStock[0].close;
+    const totalPortfolioWorth = queriedStocks.reduce((prev, current) => {
+      const [queriedTicker, queriedAmount] = current.split(":");
+      const queriedStock = stockData.filter(
+        (entry) => entry.ticker === queriedTicker
+      );
 
-    return prev + queriedStockWorth;
-  }, 0);
+      if (!queriedStock[0])
+        throw new Error(`${queriedTicker} is not available for parsing.`);
+      else {
+        const queriedStockWorth = Number(queriedAmount) * queriedStock[0].close;
 
-  return totalPortfolioWorth;
+        return prev + queriedStockWorth;
+      }
+    }, 0);
+
+    return { value: totalPortfolioWorth };
+  } catch (err: any) {
+    return { value: 0, error: err };
+  }
 }
 
 interface ProfitOutput {
   profit: number;
   dayToBuy?: number;
   dayToSell?: number;
+  error?: string;
 }
 
 function maximizeProfit(stockPriceByDay: string): ProfitOutput {
@@ -67,7 +81,9 @@ export default function Home() {
       const [part, data] = values.command.split(" ");
       switch (part) {
         case "-part1":
-          setOutput(`$${getPortfolioValue(data)}`);
+          const portfolio = getPortfolioValue(data);
+          if (!portfolio.error) setOutput(`$${portfolio.value}`);
+          else setOutput(`${portfolio.error}`);
           break;
         case "-bonus":
           const profitInfo = maximizeProfit(data);
@@ -78,6 +94,7 @@ export default function Home() {
           else setOutput("No profitable buy/sell options listed.");
           break;
         default:
+          setOutput("Invalid option. Try '-part1' or '-bonus'");
           break;
       }
     },
