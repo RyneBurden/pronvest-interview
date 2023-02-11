@@ -76,20 +76,30 @@ function maximizeProfit(stockPriceByDay: string): ProfitOutput {
 export default function Home() {
   const formik = useFormik({
     initialValues: { command: "" },
-    validate: (values) => {},
     onSubmit: (values) => {
       const [part, data] = values.command.split(" ");
       switch (part) {
         case "-part1":
           const portfolio = getPortfolioValue(data);
-          if (!portfolio.error) setOutput(`$${portfolio.value}`);
+          if (!portfolio.error)
+            setOutput(
+              `The queried portfolio is worth ${new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(portfolio.value)}.`
+            );
           else setOutput(`${portfolio.error}`);
           break;
         case "-bonus":
           const profitInfo = maximizeProfit(data);
           if (profitInfo.profit > 0)
             setOutput(
-              `Buy on day ${profitInfo.dayToBuy} and sell on day ${profitInfo.dayToSell} for a profit of $${profitInfo.profit}.`
+              `Buy on day ${profitInfo.dayToBuy} and sell on day ${
+                profitInfo.dayToSell
+              } for a profit of ${new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(profitInfo.profit)}.`
             );
           else setOutput("No profitable buy/sell options listed.");
           break;
@@ -110,17 +120,20 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen w-screen flex items-center justify-center">
-        <div className="h-1/2 w-1/2 bg-green-200 rounded-md p-3">
-          <div className="h-1/6 w-full bg-violet-400 flex items-center">
+        <div className="h-fit w-1/3 bg-gray-700 rounded-md p-3 space-y-4">
+          <div className="h-fit w-full flex items-center">
             <form
               className="w-full flex space-x-3"
               onSubmit={formik.handleSubmit}
             >
               <input
                 onChange={formik.handleChange}
+                onReset={formik.handleReset}
                 className="w-full p-2 rounded"
                 type="text"
                 name="command"
+                placeholder="test case"
+                value={formik.values.command}
               />
               <button className="bg-gray-600 p-2 rounded" type="submit">
                 Submit
@@ -128,13 +141,18 @@ export default function Home() {
               <button
                 className="bg-gray-600 p-2 rounded"
                 type="button"
-                onClick={() => formik.resetForm()}
+                onClick={() => {
+                  formik.resetForm();
+                  setOutput("");
+                }}
               >
                 Reset
               </button>
             </form>
           </div>
-          <div className="h-5/6 w-full bg-violet-500">{output}</div>
+          <div className="h-10 w-full rounded bg-gray-600 flex items-center justify-center">
+            {output}
+          </div>
         </div>
       </main>
     </>
