@@ -74,6 +74,11 @@ function maximizeProfit(stockPriceByDay: string): ProfitOutput {
 }
 
 export default function Home() {
+  const numberFormat = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   const formik = useFormik({
     initialValues: { command: "" },
     onSubmit: (values) => {
@@ -86,13 +91,9 @@ export default function Home() {
             const portfolio = getPortfolioValue(data);
             if (!portfolio.error)
               setOutput(
-                `The queried portfolio is worth ${new Intl.NumberFormat(
-                  "en-US",
-                  {
-                    style: "currency",
-                    currency: "USD",
-                  }
-                ).format(portfolio.value)}.`
+                `The queried portfolio is worth ${numberFormat.format(
+                  portfolio.value
+                )}.`
               );
             else setOutput(`${portfolio.error}`);
             break;
@@ -128,7 +129,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen w-screen flex items-center justify-center">
-        <div className="h-fit w-1/3 bg-gray-700 rounded-md p-6 space-y-4">
+        <div className="h-fit w-screen lg:w-1/2 bg-gray-700 rounded-md p-6 space-y-4">
           <div className="h-fit w-full flex items-center">
             <form
               className="w-full flex space-x-3"
@@ -137,7 +138,7 @@ export default function Home() {
               <input
                 onChange={formik.handleChange}
                 onReset={formik.handleReset}
-                className="w-full p-2 rounded"
+                className="w-full p-2 rounded focus-none"
                 type="text"
                 name="command"
                 placeholder="test case"
@@ -158,7 +159,7 @@ export default function Home() {
               </button>
             </form>
           </div>
-          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2">
+          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2 transition-all">
             {output}
           </div>
         </div>
