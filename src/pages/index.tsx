@@ -145,8 +145,8 @@ export default function Home() {
       <main className="h-screen max-h-screen w-screen flex flex-col items-center justify-center">
         <div className="w-screen lg:w-1/2 h-fit bg-black">
           <div className="h-fit flex space-x-6 justify-center items-center">
-            {stockData.map((stock) => {
-              return <p>{`${stock.ticker} - ${stock.close}`}</p>;
+            {stockData.map((stock, index) => {
+              return <p key={index}>{`${stock.ticker} - ${stock.close}`}</p>;
             })}
           </div>
         </div>
