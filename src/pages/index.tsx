@@ -142,7 +142,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen max-h-screen w-screen flex items-center justify-center">
+      <main className="h-screen max-h-screen w-screen flex flex-col items-center justify-center">
+        <div className="w-screen lg:w-1/2 h-fit bg-black">
+          <div className="h-fit flex space-x-6 justify-center items-center">
+            {stockData.map((stock) => {
+              return <p>{`${stock.ticker} - ${stock.close}`}</p>;
+            })}
+          </div>
+        </div>
         <div className="h-fit w-screen lg:w-1/2 bg-gray-700 rounded-md p-6 space-y-4">
           <div className="h-16 w-full rounded bg-black text-green-400 flex items-center justify-center p-2 transition-all">
             {output}
