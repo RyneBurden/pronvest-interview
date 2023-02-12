@@ -104,7 +104,9 @@ function handlePart2(pricesByDay: string): string {
 }
 
 export default function Home() {
-  const [output, setOutput] = useState<string>("");
+  const [output, setOutput] = useState<string>(
+    "Welcome! This was made for an interview with ProNVest."
+  );
 
   const formik = useFormik({
     initialValues: { command: "" },
@@ -142,7 +144,7 @@ export default function Home() {
       </Head>
       <main className="h-screen max-h-screen w-screen flex items-center justify-center">
         <div className="h-fit w-screen lg:w-1/2 bg-gray-700 rounded-md p-6 space-y-4">
-          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2 transition-all">
+          <div className="h-16 w-full rounded bg-black text-green-400 flex items-center justify-center p-2 transition-all">
             {output}
           </div>
 
@@ -154,21 +156,26 @@ export default function Home() {
               <input
                 onChange={formik.handleChange}
                 onReset={formik.handleReset}
-                className="w-full p-2 rounded focus-none"
+                className="w-full p-2 rounded focus-none bg-black"
                 type="text"
                 name="command"
                 placeholder="test case"
                 value={formik.values.command}
               />
-              <button className="bg-gray-600 p-2 rounded" type="submit">
+              <button
+                className="bg-green-500 hover:bg-blue-200 p-2 rounded transition-all"
+                type="submit"
+              >
                 Submit
               </button>
               <button
-                className="bg-gray-600 p-2 rounded"
+                className="bg-red-500 p-2 rounded"
                 type="button"
                 onClick={() => {
                   formik.resetForm();
-                  setOutput("");
+                  setOutput(
+                    "Welcome! This was made for an interview with ProNVest."
+                  );
                 }}
               >
                 Reset
