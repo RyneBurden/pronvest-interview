@@ -186,7 +186,7 @@ export default function Home() {
             </form>
           </div>
 
-          <div className="h-full max-h-96 overflow-y-scroll overscroll-contain w-full bg-gray-600 p-2 space-y-6">
+          <div className="h-full max-h-96 overflow-y-scroll overscroll-contain w-full bg-gray-600 p-4 space-y-6">
             <section className="space-y-2">
               <h2 className="text-2xl underline">Part 1</h2>
               <div className="pl-2">
