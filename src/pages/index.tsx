@@ -6,6 +6,8 @@ import { useFormik } from "formik";
 import { useState } from "react";
 
 import stockData from "../stocks.json";
+import { CodeBlock } from "@/components/CodeBlock";
+import { SubSection } from "@/components/SubSection";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -138,8 +140,12 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-screen flex items-center justify-center">
+      <main className="h-screen max-h-screen w-screen flex items-center justify-center">
         <div className="h-fit w-screen lg:w-1/2 bg-gray-700 rounded-md p-6 space-y-4">
+          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2 transition-all">
+            {output}
+          </div>
+
           <div className="h-fit w-full flex items-center">
             <form
               className="w-full flex space-x-3"
@@ -169,8 +175,57 @@ export default function Home() {
               </button>
             </form>
           </div>
-          <div className="h-16 w-full rounded bg-gray-600 flex items-center justify-center p-2 transition-all">
-            {output}
+
+          <div className="h-full max-h-96 overflow-y-scroll overscroll-contain w-full bg-gray-600 p-2 space-y-6">
+            <section className="space-y-2">
+              <h2 className="text-2xl underline">Part 1</h2>
+              <div className="pl-2">
+                <p className="text-md">
+                  A sample stock portfolio is passed in as an argument to a
+                  console application. Your application should parse this input,
+                  lookup the current stock price at close from the sample
+                  stocks.json feed file, and then return the total value of the
+                  portfolio.
+                </p>
+                <SubSection
+                  subHeading="Input:"
+                  innerText="-part1 [<TICKER>:<QUANTITY>]"
+                />
+                <SubSection subHeading="Output:" innerText="<TOTAL>" />
+                <SubSection
+                  subHeading="Test Case:"
+                  innerText='-part1 "FB:12,PLTR:5000"'
+                />
+              </div>
+            </section>
+            <section className="space-y-2">
+              <h2 className="text-2xl underline">Part 2</h2>
+              <div className="pl-2">
+                <p className="text-md">
+                  An analyst has developed an equation for predicting future
+                  stock prices. A client wants to use this algorithm to place a
+                  buy order at the optimum time and one sell order at the
+                  optimum time. You are provided a list of prices where
+                  prices[i] is the price of a given stock on the ith day. You
+                  want to maximize your profit by choosing a single day to buy
+                  one stock and choosing one different day to sell in the
+                  future. Due to trade restrictions, you may only place one buy
+                  order and one sell order. Return the maximum profit that the
+                  client can achieve from this transaction. If the client cannot
+                  achieve any profit, then return 0. Your application should
+                  work for any random list of prices.
+                </p>
+                <SubSection
+                  subHeading="Input:"
+                  innerText="-part2 [<PRICE>] OR -bonus [<PRICE>]"
+                />
+                <SubSection subHeading="Output:" innerText="<PROFIT>" />
+                <SubSection
+                  subHeading="Test Case:"
+                  innerText='-part2 "7,1,5,3,6,4" OR -bonus "7,1,5,3,6,4"'
+                />
+              </div>
+            </section>
           </div>
         </div>
       </main>
