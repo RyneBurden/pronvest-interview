@@ -170,13 +170,13 @@ export default function Home() {
                 value={formik.values.command}
               />
               <button
-                className="bg-green-500 hover:bg-blue-200 p-2 rounded transition-all"
+                className="bg-green-500 hover:bg-green-600 p-2 rounded transition-all"
                 type="submit"
               >
                 Submit
               </button>
               <button
-                className="bg-red-500 p-2 rounded"
+                className="bg-red-500 hover:bg-red-600 p-2 rounded transition-all"
                 type="button"
                 onClick={() => {
                   formik.resetForm();
