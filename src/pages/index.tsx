@@ -25,7 +25,9 @@ function getPortfolioValue(portfolioString: string): Portfolio {
       );
 
       if (!queriedStock[0])
-        throw new Error(`${queriedTicker} is not available for parsing.`);
+        throw new Error(
+          `${queriedTicker} is not a valid stock, please try again.`
+        );
       else {
         const queriedStockWorth = Number(queriedAmount) * queriedStock[0].close;
 
@@ -73,11 +75,34 @@ function maximizeProfit(stockPriceByDay: string): ProfitOutput {
   else return { profit: maxProfit, dayToBuy: minPriceIndex + 1, dayToSell };
 }
 
+const numberFormat = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+function handlePart1(queriedStocks: string): string {
+  const portfolio = getPortfolioValue(queriedStocks);
+  if (!portfolio.error)
+    return `The queried portfolio is worth ${numberFormat.format(
+      portfolio.value
+    )}.`;
+
+  return `${portfolio.error}`;
+}
+
+// This is used for both -part2 and -bonus. I couldn't tell them apart so I wanted to handle both cases
+function handlePart2(pricesByDay: string): string {
+  const profitInfo = maximizeProfit(pricesByDay);
+  if (profitInfo.profit > 0)
+    return `Buy on day ${profitInfo.dayToBuy} and sell on day ${
+      profitInfo.dayToSell
+    } for a profit of ${numberFormat.format(profitInfo.profit)}.`;
+
+  return "No profitable buy/sell options listed.";
+}
+
 export default function Home() {
-  const numberFormat = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  const [output, setOutput] = useState<string>("");
 
   const formik = useFormik({
     initialValues: { command: "" },
@@ -88,38 +113,23 @@ export default function Home() {
       else
         switch (part) {
           case "-part1":
-            const portfolio = getPortfolioValue(data);
-            if (!portfolio.error)
-              setOutput(
-                `The queried portfolio is worth ${numberFormat.format(
-                  portfolio.value
-                )}.`
-              );
-            else setOutput(`${portfolio.error}`);
+            setOutput(handlePart1(data));
+            break;
+          case "-part2":
+            setOutput(handlePart2(data));
             break;
           case "-bonus":
-            const profitInfo = maximizeProfit(data);
-            if (profitInfo.profit > 0)
-              setOutput(
-                `Buy on day ${profitInfo.dayToBuy} and sell on day ${
-                  profitInfo.dayToSell
-                } for a profit of ${new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(profitInfo.profit)}.`
-              );
-            else setOutput("No profitable buy/sell options listed.");
+            setOutput(handlePart2(data));
             break;
           default:
             setOutput(
-              "Invalid option. Try '-part1' or '-bonus' and make sure to leave out the executable call."
+              "Invalid option. Try '-part1' or '-part2' or '-bonus' and make sure to leave out the executable call."
             );
             break;
         }
     },
   });
 
-  const [output, setOutput] = useState<string>("");
   return (
     <>
       <Head>
