@@ -113,24 +113,20 @@ export default function Home() {
     onSubmit: (values) => {
       const [part, data] = values.command.split(" ");
 
-      if (!data) setOutput("Invalid input");
-      else
-        switch (part) {
-          case "-part1":
-            setOutput(handlePart1(data));
-            break;
-          case "-part2":
-            setOutput(handlePart2(data));
-            break;
-          case "-bonus":
-            setOutput(handlePart2(data));
-            break;
-          default:
-            setOutput(
-              "Invalid option. Try '-part1' or '-part2' or '-bonus' and make sure to leave out the executable call."
-            );
-            break;
-        }
+      switch (part) {
+        case "-part1":
+          setOutput(handlePart1(data));
+          break;
+        case "-part2":
+          setOutput(handlePart2(data));
+          break;
+        case "-bonus":
+          setOutput(handlePart2(data));
+          break;
+        default:
+          setOutput("Invalid input. See the options and test cases below.");
+          break;
+      }
     },
   });
 
